@@ -28,13 +28,13 @@ NULL_DELTA = 1.0
 # Grid step used for the scan at each n. The same step must be used when this
 # critical value is applied (experiments 03, 05, 06).
 CONFIG = {
-    "n500": {"n": 500, "step": 1, "mc_sims": 1000},
-    "n1000": {"n": 1000, "step": 5, "mc_sims": 1000},  # added for the Step 7 n sweep
-    "n2000": {"n": 2000, "step": 5, "mc_sims": 1000},
+    "n500": {"n": 500, "step": 1, "mc_sims": 5000},
+    "n1000": {"n": 1000, "step": 5, "mc_sims": 5000},  # added for the Step 7 n sweep
+    "n2000": {"n": 2000, "step": 5, "mc_sims": 5000},
 }
 MC_SEED = 20000
 FRESH_SEED = 30000
-FRESH_SIMS = 200
+FRESH_SIMS = 500
 
 
 def asymptotic_critical_value(grid=10_000, reps=100_000, batch=500, seed=0):
