@@ -1,3 +1,5 @@
+import math
+
 import numpy as np
 from scipy.optimize import minimize_scalar
 
@@ -66,3 +68,65 @@ def scan(picks, trim=0.1, step=1):
     m_values, stats = scan_curve(picks, trim=trim, step=step)
     best = int(np.argmax(stats))
     return float(stats[best]), int(m_values[best])
+
+
+def _degree_count_frames(picks):
+    """
+    Replay the degree sequence and return, for each node count m, the vector of
+    degree counts N[d] = number of nodes with degree d when the graph has m nodes.
+
+    Seed graph G(2) has two nodes of degree 2 (the contract's [2, 2] seed). Each
+    pick (d, k) moves one node from degree d to d + 1 and adds a new degree-1 node,
+    so the graph has k nodes afterwards. Returns (frames, n) where frames[m] is the
+    count vector at m nodes, for m = 2 .. n.
+    """
+    arr = np.asarray(picks, dtype=int).reshape(-1, 2)
+    degrees, steps = arr[:, 0], arr[:, 1]
+    n = int(steps.max())
+    width = int(max(degrees.max() + 2, 3))
+
+    counts = np.zeros(width, dtype=float)
+    counts[2] = 2.0  # seed [2, 2]
+    frames = {2: counts.copy()}
+    for d, k in zip(degrees, steps):
+        counts[d] -= 1
+        counts[d + 1] += 1
+        counts[1] += 1
+        frames[int(k)] = counts.copy()
+    return frames, n
+
+
+def that_nonparametric(picks):
+    """
+    Bhamidi, Jin & Nobel non-parametric changepoint estimator (Paper B, Eq. 18).
+
+        T_hat = inf { t >= 1/h_n :
+                      sum_{i>=0} 2^-i |N_{i+1}(nt)/nt - N_{i+1}(n/h_n)/(n/h_n)| > 1/b_n }
+
+    with the paper's defaults h_n = log(log n) and b_n = n^(1/log log n). It tracks the
+    R-infinity distance between the current empirical degree distribution and an early
+    reference one, flagging a changepoint at the first time the distance exceeds 1/b_n.
+    Unlike `scan`, it gives only a location, no hypothesis test. Returns the estimated
+    changepoint as a fraction t_hat in (0, 1), or nan if the distance never crosses.
+    """
+    frames, n = _degree_count_frames(picks)
+    h = math.log(math.log(n))
+    b = n ** (1.0 / h)
+    threshold = 1.0 / b
+    m0 = int(np.floor(n / h))
+    if m0 < 2:
+        m0 = 2
+    m0 = min(m0, n)
+
+    ref = frames[m0]
+    weights = 0.5 ** np.arange(len(ref) - 1)  # 2^-i for degrees d = i + 1 >= 1
+
+    for m in range(m0 + 1, n + 1):
+        cur = frames[m]
+        width = min(len(cur), len(ref))
+        # degrees d = 1 .. width-1 (index 0 is unused: no degree-0 nodes)
+        diff = np.abs(cur[1:width] / m - ref[1:width] / m0)
+        dist = float(np.dot(weights[: width - 1], diff))
+        if dist > threshold:
+            return m / n
+    return float("nan")
