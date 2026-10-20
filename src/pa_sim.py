@@ -8,7 +8,7 @@ def attachment_probabilities(degrees, delta):
     P(v) = (degree[v] + delta) / sum(degree[u] + delta)
 
     With the seed [2, 2] the sum equals (2 + delta) * (k - 1) at step k
-    (Paper B, Eq. 10), because total degree is 2(k - 1).
+    (Paper B, Eq. 1 and Eq. 10; same numbers in both versions), because total degree is 2(k - 1).
     """
     degrees = np.asarray(degrees, dtype=float)
 

@@ -45,7 +45,7 @@ Large language model (LLM) agents have recently been shown to reproduce classica
 
 ### Paper B — The statistical tool being borrowed (the changepoint test)
 
-**Citation:** Cirkovic, D., Wang, T., & Zhang, X. (2025). *Likelihood-based Inference for Random Networks with Changepoints.* IEEE Transactions on Network Science and Engineering. DOI: 10.1109/TNSE.2025.3583550.
+**Citation:** Cirkovic, D., Wang, T., & Zhang, X. (2026). *Likelihood-Based Inference for Random Networks With Changepoints.* IEEE Transactions on Network Science and Engineering, 13, 344–359 (year and pages as on the author's accepted manuscript; may also be listed as 2025 from the early-access date). DOI: 10.1109/TNSE.2025.3583550. arXiv:2206.01076.
 
 **What it does:**
 - Works with the classical, undirected, affine preferential attachment model: at each time step, a new node joins and attaches to an existing node `v` with probability proportional to `(degree(v) + δ)`, where δ is the "offset parameter" controlling how strongly the network favors high-degree nodes.
@@ -55,12 +55,32 @@ Large language model (LLM) agents have recently been shown to reproduce classica
   - The test statistic (a likelihood ratio, `-2 log Λ`) converges to a known distribution (the supremum of a scaled Brownian bridge process) under the null hypothesis of "no changepoint" — meaning you can compute a rigorous p-value, not just an ad hoc threshold.
   - The changepoint location estimator is consistent (converges to the true changepoint location as the network grows).
 - Extends the single-changepoint test to **multiple changepoints** via two methods: a sliding-window local-maximum method (SaRa-style) and a faster score-statistic method suited for binary segmentation.
-- Validates all of this extensively: Type I error simulations (500 trials per setting), statistical power curves, mean-absolute-error tables for changepoint location accuracy — and applies it to a real dataset, the Mathematics Genealogy Project (94,858 mathematician advisor-advisee records spanning 1950–2024), correctly detecting real historical disruptions (Vietnam-War-era PhD trends in 1978, oversaturation concerns around 1995, and a 2014 shift) without being told where to look.
+- Validates all of this extensively: Type I error simulations (500 trials per setting), statistical power curves, mean-absolute-error tables for changepoint location accuracy — and applies it to a real dataset, the Mathematics Genealogy Project (a tree of 94,858 mathematicians, with a seed of 3,718 earlier mathematicians and yearly snapshots for graduates from 1951 to 2024), detecting changepoints in 1978, 1995 and 2014 that the authors say align with disruptions in graduate numbers (the 1978 decline is linked to the end of Vietnam-War-era draft deferments and PhD oversaturation concerns, and the lack of growth around 1995 to oversaturation concerns; the paper gives no explanation for 2014), without the procedure using that information.
+
+**Numbering.** This document follows the published IEEE version of Paper B (checked against the author's accepted manuscript, IEEE TNSE vol. 13, 2026, pp. 344–359). The arXiv v3 copy (2206.01076v3) numbers the same items differently, and some of the project's other files (for example `plan_valincia.md`) use the arXiv numbers. Mapping, IEEE → arXiv v3:
+
+| Item | IEEE version | arXiv v3 |
+|---|---|---|
+| Attachment rule; likelihood | Eq. 1; Eq. 10 | Eq. 1; Eq. 10 |
+| Log-likelihood; score; Hessian | display under Eq. 10; Eq. 11; Eq. 12 | Eq. 11; Eq. 12; Eq. 13 |
+| Fisher information | Eq. 15 | Eq. 16 |
+| Non-parametric estimator T̂ (Banerjee et al., ref. [11]) | Eq. 20, ref. [11] | Eq. 18, ref. [2] |
+| Likelihood-ratio statistic Λ_m | Eq. 22 | Eq. 20 |
+| Null limit (Brownian-bridge supremum) | Theorem 4.2, Eq. 23 | Theorem 3.2, Eq. 21 |
+| MLE consistent after the changepoint; its normality | Theorems 4.3; 4.4 | Theorems 3.3; 3.4 |
+| Consistency of the location estimate | Theorem 4.5, Eq. 24 | Theorem 3.5, Eq. 22 |
+| Type I error; location error vs T̂; sublinear change | Tables IV; V; VI | Tables 1; 2; 3 |
+| Window / score false-positive rates; number of changepoints found | Tables VII; VIII | Tables 4; 5 |
+| Simulation study | Section IV-D | Section 3.4 |
+| Multiple changepoints (SaRa window, score + binary segmentation) | Section V (V-A, V-B) | Section 4 (4.1, 4.2) |
+| Real-data example | Section VI: Mathematics Genealogy Project | Section 5: Twitter Higgs network |
+
+The method our code implements (model, likelihood, test statistic, null limit, location estimator, T̂) is the same in both versions. Differences in the published version that matter here: the real-data example; a passage in Section IV-D warning that under uniform-like attachment the fitted delta can drift and mimic a changepoint; a remark that typical delta in real networks lies in (−1, 1) (Section III-A); and extra single-changepoint experiments for the window and score methods (Appendix B, not read).
 
 **What it does NOT do (the gap you are closing):**
 - Every experiment in the paper uses either purely synthetic, mathematically-generated PA networks, or one real human-generated dataset (mathematician advisor records).
 - It has never been applied to networks generated by an AI decision-making process (LLM agents) rather than a human process or a closed-form probability formula.
-- The authors explicitly flag extending their framework to new data-generating processes and models (e.g., with vertex death, or multiple-attachment mechanisms) as future work — this project is exactly that kind of extension, applied to a data-generating process (LLM agents) they never considered.
+- The authors name, as limitations and future work, models with several attachments per node, sublinear attachment, Bayesian treatments with latent variables, and (in their data example) vertex death. They never consider AI-agent processes; applying the test to LLM-agent networks is this project's extension to a data-generating process they did not study.
 
 ---
 
@@ -89,7 +109,7 @@ Choose one intervention type (recommended order below):
 - Compute the MLE of δ at each stage using Paper B's Equations 10–14.
 - Run Paper B's single-changepoint likelihood ratio test (Equation 22, Theorem 4.2) to test whether a changepoint occurred, and estimate its location.
 - Compare the detected changepoint location against the *true* location (known exactly, since you control when the intervention happens) — this mirrors Paper B's own Table 5 (mean absolute error of changepoint location).
-- Optional stretch: also run Paper B's non-parametric competitor (Bhamidi, Jin & Nobel's degree-distribution-based estimator) side-by-side, exactly as Paper B's Section 4.4 does, to see which method wins on LLM-generated data the way the likelihood method wins on their synthetic data.
+- Optional stretch: also run Paper B's non-parametric competitor (the degree-distribution-based estimator of Banerjee, Bhamidi & Carmichael (2023), Paper B's Eq. 18 and reference [2]) side-by-side, exactly as Paper B's Section 4.4 does, to see which method wins on LLM-generated data the way the likelihood method wins on their synthetic data.
 
 ### Component 4 — Classical-PA control group (your baseline)
 - Run the identical changepoint-detection pipeline on a purely synthetic, mathematically-generated PA network with a known, hand-set δ₁ → δ₂ shift (directly reproducing Paper B's own Table 4/5 experiment).
@@ -106,7 +126,7 @@ Choose one intervention type (recommended order below):
 | 4 | Run the control experiment: classical synthetic PA network with a known changepoint. Confirm you can reproduce their reported MAE numbers before touching anything new — this is your correctness sanity check. |
 | 5–6 | Run the LLM-agent network with the persona-shift intervention. Apply the changepoint test. Record: detection accuracy, estimated δ before/after, comparison to expected values. |
 | 7 | Run the temperature-shift intervention (the genuinely uncertain, most novel experiment). |
-| 8 | Write up comparison tables mirroring Paper B's Table 5/6/7 structure (mean absolute error, rejection rates, statistical power) across three conditions: classical synthetic PA, LLM-agent persona-shift, LLM-agent temperature-shift. |
+| 8 | Write up comparison tables mirroring Paper B's Table IV (rejection rates), Table V (mean absolute error of the location) and Fig. 1 (power curve) across three conditions: classical synthetic PA, LLM-agent persona-shift, LLM-agent temperature-shift. |
 
 ---
 
@@ -120,7 +140,7 @@ Choose one intervention type (recommended order below):
 
 ## 8. Explicitly Stated Gaps You Are Citing as Your Novelty Justification
 
-- **From Paper B's conclusion:** the authors explicitly state their model only allows new nodes to attach to exactly one existing node, and explicitly flag extending their framework to new data-generating processes and models (e.g., with vertex death, Bayesian treatments for latent-variable models) as future work. This project is exactly that kind of extension — applied to a data-generating process (LLM agents) they never considered.
+- **From Paper B's conclusion:** the authors explicitly state their model only allows new nodes to attach to exactly one existing node, and name extensions to other models (multiple attachments per node, sublinear attachment, Bayesian treatments for latent-variable models) as future work, with vertex death noted as a limitation of their data example. This project applies the framework to a data-generating process the authors did not consider (LLM agents).
 - **From Paper A:** the authors validate LLM-network-formation principles only against static, aggregate statistics (final degree distribution, clustering, homophily correlation) and never test the *temporal stability* of the attachment parameter during growth. Your changepoint analysis is a temporal-robustness test their paper never attempted.
 
 ---
@@ -128,6 +148,7 @@ Choose one intervention type (recommended order below):
 ## 9. Reference List (for your paper's related-work section)
 
 1. Papachristou, M. & Yuan, Y. (2024/2025). *Network Formation and Dynamics Among Multi-LLMs.* arXiv:2402.10659; PNAS Nexus, 4(12), pgaf317.
-2. Cirkovic, D., Wang, T., & Zhang, X. (2025). *Likelihood-based Inference for Random Networks with Changepoints.* IEEE Transactions on Network Science and Engineering. DOI: 10.1109/TNSE.2025.3583550.
+2. Cirkovic, D., Wang, T., & Zhang, X. (2026). *Likelihood-Based Inference for Random Networks With Changepoints.* IEEE Transactions on Network Science and Engineering, 13, 344–359 (year and pages as on the author's accepted manuscript; may also be listed as 2025 from the early-access date). DOI: 10.1109/TNSE.2025.3583550. arXiv:2206.01076.
 3. Barabási, A.-L. & Albert, R. (1999). *Emergence of Scaling in Random Networks.* Science, 286(5439), 509–512. (Foundational BA model — your network-generation baseline.)
-4. Bhamidi, S., Jin, J., & Nobel, A. (2018). *Change point detection in network models: Preferential attachment and long range dependence.* The Annals of Applied Probability, 28(1), 35–78. (The non-parametric competitor method Paper B compares against — useful as a second baseline in your own experiments.)
+4. Bhamidi, S., Jin, J., & Nobel, A. (2018). *Change point detection in network models: Preferential attachment and long range dependence.* The Annals of Applied Probability, 28(1), 35–78. (The earlier non-parametric estimator, which tracks the proportion of leaves; Paper B cites it but compares against reference 5 below.)
+5. Banerjee, S., Bhamidi, S., & Carmichael, I. (2023). *Fluctuation bounds for continuous time branching processes and evolution of growing trees with a change point.* The Annals of Applied Probability, 33(4), 2919–2980. (The degree-distribution estimator of Paper B Eq. 18, the non-parametric competitor Paper B actually compares against; useful as a second baseline in your own experiments.)

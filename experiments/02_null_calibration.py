@@ -26,11 +26,13 @@ TRIM = 0.1
 NULL_DELTA = 1.0
 
 # Grid step used for the scan at each n. The same step must be used when this
-# critical value is applied (experiments 03, 05, 06).
+# critical value is applied (experiments 03, 05, 06). Step 1 = every split, as in Paper B (IEEE Eq. 22).
+# (Earlier versions used step 5 at n = 1000 and 2000 for speed, which lowers the maximum slightly; the
+# vectorised scan in src/changepoint.py makes the full grid cheap.)
 CONFIG = {
     "n500": {"n": 500, "step": 1, "mc_sims": 5000},
-    "n1000": {"n": 1000, "step": 5, "mc_sims": 5000},  # added for the Step 7 n sweep
-    "n2000": {"n": 2000, "step": 5, "mc_sims": 5000},
+    "n1000": {"n": 1000, "step": 1, "mc_sims": 5000},  # added for the Step 7 n sweep
+    "n2000": {"n": 2000, "step": 1, "mc_sims": 5000},
 }
 MC_SEED = 20000
 FRESH_SEED = 30000
@@ -38,7 +40,7 @@ FRESH_SIMS = 500
 
 
 def asymptotic_critical_value(grid=10_000, reps=100_000, batch=500, seed=0):
-    """95th percentile of sup_{t in [0.1, 0.9]} B(t)^2 / (t (1 - t)) (Theorem 3.2, Eq. 21)."""
+    """95th percentile of sup_{t in [0.1, 0.9]} B(t)^2 / (t (1 - t)) (Theorem 4.2, Eq. 23 in the IEEE version; Theorem 3.2, Eq. 21 in arXiv v3)."""
     rng = np.random.default_rng(seed)
     t = np.arange(1, grid + 1) / grid
     keep = (t >= TRIM) & (t <= 1 - TRIM)
