@@ -4,6 +4,15 @@ from scipy.optimize import minimize_scalar
 DELTA_BOUNDS = (-0.99, 50.0)
 
 
+def at_bound(delta, tol=0.01):
+    """True if an estimate sits on a search bound (-0.99 or 50), i.e. the MLE did not find an interior optimum.
+
+    A bound hit signals a model mismatch (for example every pick landing on the hub, or on a leaf),
+    not a real estimate of delta, so report how many runs do it.
+    """
+    return bool(delta <= DELTA_BOUNDS[0] + tol or delta >= DELTA_BOUNDS[1] - tol)
+
+
 def _arrays(picks):
     """Split picks [(chosen_degree, k), ...] into degree and step arrays."""
     arr = np.asarray(picks, dtype=float).reshape(-1, 2)
@@ -12,7 +21,7 @@ def _arrays(picks):
 
 def loglik(delta, picks):
     """
-    Log-likelihood of delta (Paper B, Eq. 10-13, two-node seed).
+    Log-likelihood of delta (Paper B, Eq. 10-12 in the IEEE version, Eq. 10-13 in arXiv v3; two-node seed).
 
     sum(log(d + delta)) - sum(log(k - 1)) - m * log(2 + delta)
     """

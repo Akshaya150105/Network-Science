@@ -1,7 +1,7 @@
 import numpy as np
 import pytest
 
-from src.mle import loglik, loglik_window, mle, mle_window, score
+from src.mle import at_bound, loglik, loglik_window, mle, mle_window, score
 from src.pa_sim import simulate_pa, simulate_pa_changepoint
 
 
@@ -54,3 +54,9 @@ def test_window_mle_tracks_regime():
     d1 = mle_window(picks, 2, n // 2)
     d2 = mle_window(picks, n // 2, n)
     assert d2 > d1
+
+
+def test_at_bound_flags_boundary_estimates_only():
+    assert at_bound(mle([(1, k) for k in range(3, 60)]))      # leaf-only picks -> upper bound 50
+    assert at_bound(mle([(2, 3)] + [(k - 1, k) for k in range(4, 60)]))  # hub-only picks -> lower bound
+    assert not at_bound(1.0) and not at_bound(0.5) and not at_bound(3.2)
