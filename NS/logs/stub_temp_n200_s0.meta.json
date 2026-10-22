@@ -1,0 +1,34 @@
+{
+ "run_id": "stub_temp_n200_s0",
+ "condition": "temp",
+ "n": 200,
+ "seed": 0,
+ "tau_true": 100,
+ "prompt_schedule": [
+  {
+   "from": 3,
+   "to": 200,
+   "value": "baseline"
+  }
+ ],
+ "temperature_schedule": [
+  {
+   "from": 3,
+   "to": 100,
+   "value": 0.5
+  },
+  {
+   "from": 101,
+   "to": 200,
+   "value": 1.5
+  }
+ ],
+ "model_schedule": [
+  {
+   "from": 3,
+   "to": 200,
+   "value": "stub"
+  }
+ ],
+ "chooser": "stub_pa"
+}

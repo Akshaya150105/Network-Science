@@ -1,0 +1,34 @@
+{
+ "run_id": "stub_persona_n200_s0",
+ "condition": "persona",
+ "n": 200,
+ "seed": 0,
+ "tau_true": 100,
+ "prompt_schedule": [
+  {
+   "from": 3,
+   "to": 100,
+   "value": "popular"
+  },
+  {
+   "from": 101,
+   "to": 200,
+   "value": "newer"
+  }
+ ],
+ "temperature_schedule": [
+  {
+   "from": 3,
+   "to": 200,
+   "value": 0.5
+  }
+ ],
+ "model_schedule": [
+  {
+   "from": 3,
+   "to": 200,
+   "value": "stub"
+  }
+ ],
+ "chooser": "stub_pa"
+}

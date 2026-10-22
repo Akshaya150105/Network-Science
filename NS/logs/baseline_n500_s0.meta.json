@@ -1,0 +1,29 @@
+{
+ "run_id": "baseline_n500_s0",
+ "condition": "baseline",
+ "n": 500,
+ "seed": 0,
+ "tau_true": null,
+ "prompt_schedule": [
+  {
+   "from": 3,
+   "to": 500,
+   "value": "baseline"
+  }
+ ],
+ "temperature_schedule": [
+  {
+   "from": 3,
+   "to": 500,
+   "value": 0.5
+  }
+ ],
+ "model_schedule": [
+  {
+   "from": 3,
+   "to": 500,
+   "value": "llama3.1-8k"
+  }
+ ],
+ "chooser": "llm"
+}

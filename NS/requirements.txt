@@ -3,3 +3,6 @@ scipy
 pandas
 matplotlib
 networkx
+requests
+powerlaw
+pytest
