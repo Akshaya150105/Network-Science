@@ -1,0 +1,9 @@
+# Future work (statistics side)
+
+* **Longer runs and cheaper choosers.** Power at n = 500 is the main constraint. Larger n (for example 2,000 with a cheaper model, or a smaller candidate window) would bring the test close to its asymptotic regime, where Paper B's guarantees apply.
+* **More replicates and a model swap.** More runs per condition, and the optional model-swap experiment, would show whether the temperature and persona effects depend on the model.
+* **Multiple changepoints.** Paper B (Section V [arXiv: Section 4]) extends the test to several changepoints, by a sliding-window method (SaRa) and by a score statistic with binary segmentation. Applying them would allow gradual drifts, or a shock that wears off, to be located.
+* **Richer attachment models.** The likelihood assumes affine attachment with one edge per node. Paper B's conclusion lists, as future work, models with several attachments per node, sublinear attachment, Bayesian treatments with latent variables and dynamic-programming speed-ups; vertex death appears in its data example as a limitation. LLM agents also use triadic closure and homophily (Paper A), so a likelihood that includes these covariates, as in the discrete-choice model of Paper A, could be tested for changepoints in each coefficient, not just the degree offset.
+* **Position and context effects.** The candidate list is shown in shuffled order; modelling the displayed position in the likelihood would test whether the apparent delta is partly a position effect.
+* **A calibrated no-shock reference.** Collecting many more no-shock LLM runs would give a proper null distribution for the statistic on LLM data, instead of relying on the Monte Carlo values from the PA model.
+* **Alternative detectors.** Compare with the non-parametric estimator at larger n, and with a test that does not assume the PA model (for example one based on the degree distribution), to separate "the model is wrong" from "there is a change".
