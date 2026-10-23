@@ -22,7 +22,7 @@ def main():
     ap.add_argument("--stub", action="store_true")
     a = ap.parse_args()
 
-    rid = ("stub_" if a.stub else "") + f"baseline_n{a.n}_s{a.seed}"
+    rid = ("stub_" if a.stub else "") + f"baseline_llama32_n{a.n}_s{a.seed}"
     model = "stub" if a.stub else lg.default_model()
     lg.grow_network(a.n, lambda t: "baseline", lambda t: a.temp, lambda t: model, rid, a.seed,
                     "stub_pa" if a.stub else "llm")
