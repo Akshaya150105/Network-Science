@@ -1,0 +1,2 @@
+n,delta,sims,seed_base,crit_mc,type1_mc,crit_asym,type1_asym,note
+2000,1.0,1800,90000,9.0166,0.056,9.2234,0.050,one-off check run after two 500-network sets gave 0.032 and 0.030 (chance; pooled over 2800 networks about 0.047)

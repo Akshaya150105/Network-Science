@@ -1,0 +1,6 @@
+label,n_runs,rejection_rate,rejection_se,mae_tau_frac_all,mae_tau_frac_rejected,median_delta1_hat,median_delta2_hat,median_delta1_hat_true_tau,median_delta2_hat_true_tau,frac_delta2_gt_delta1,n_runs_at_bound,crit_source,note
+"classical PA, n=500, delta 0.5->3 (known shift)",100.0,0.64,0.048,0.08772,0.0646875,0.4084601519070249,3.1607135083535027,0.5738497810658132,2.885550815943262,1.0,2.0,mc,100 simulated runs
+"classical PA, n=500, NO shock (Type I error)",500.0,0.048,0.009559916317625379,,,,,,,,,mc,"fresh simulations, MC critical value"
+LLM persona shift (popular -> newer),,,,,,,,,,,,,not available yet (persona_shift.csv missing)
+LLM temperature shift,,,,,,,,,,,,,not available yet (temperature_shift.csv missing)
+LLM no-shock control,,,,,,,,,,,,,not available yet (temperature_control.csv missing)
