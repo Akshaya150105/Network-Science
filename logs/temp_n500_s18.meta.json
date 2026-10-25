@@ -1,0 +1,34 @@
+{
+ "run_id": "temp_n500_s18",
+ "condition": "temp",
+ "n": 500,
+ "seed": 18,
+ "tau_true": 250,
+ "prompt_schedule": [
+  {
+   "from": 3,
+   "to": 500,
+   "value": "baseline"
+  }
+ ],
+ "temperature_schedule": [
+  {
+   "from": 3,
+   "to": 250,
+   "value": 0.5
+  },
+  {
+   "from": 251,
+   "to": 500,
+   "value": 1.5
+  }
+ ],
+ "model_schedule": [
+  {
+   "from": 3,
+   "to": 500,
+   "value": "llama3.2-8k:latest"
+  }
+ ],
+ "chooser": "llm"
+}

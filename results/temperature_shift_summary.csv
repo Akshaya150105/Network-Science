@@ -1,0 +1,2 @@
+n_runs,rejection_rate,crit,crit_source,n_runs_at_bound,basis,n_delta2_gt_delta1,n_delta2_lt_delta1,mean_diff,median_diff,sign_test_p,wilcoxon_p
+10,1.0,9.193213464910684,mc,0,known tau,10,0,7.348512474889752,7.17061443811226,0.001953125,0.001953125

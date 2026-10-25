@@ -1,0 +1,34 @@
+{
+ "run_id": "stub_temp_n500_s1",
+ "condition": "temp",
+ "n": 500,
+ "seed": 1,
+ "tau_true": 250,
+ "prompt_schedule": [
+  {
+   "from": 3,
+   "to": 500,
+   "value": "baseline"
+  }
+ ],
+ "temperature_schedule": [
+  {
+   "from": 3,
+   "to": 250,
+   "value": 0.5
+  },
+  {
+   "from": 251,
+   "to": 500,
+   "value": 1.5
+  }
+ ],
+ "model_schedule": [
+  {
+   "from": 3,
+   "to": 500,
+   "value": "stub"
+  }
+ ],
+ "chooser": "stub_pa"
+}

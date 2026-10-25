@@ -1,0 +1,29 @@
+{
+ "run_id": "tempctrl_n500_s19",
+ "condition": "tempctrl",
+ "n": 500,
+ "seed": 19,
+ "tau_true": null,
+ "prompt_schedule": [
+  {
+   "from": 3,
+   "to": 500,
+   "value": "baseline"
+  }
+ ],
+ "temperature_schedule": [
+  {
+   "from": 3,
+   "to": 500,
+   "value": 1.0
+  }
+ ],
+ "model_schedule": [
+  {
+   "from": 3,
+   "to": 500,
+   "value": "llama3.2-8k:latest"
+  }
+ ],
+ "chooser": "llm"
+}

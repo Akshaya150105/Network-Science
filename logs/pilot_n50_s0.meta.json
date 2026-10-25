@@ -1,0 +1,29 @@
+{
+ "run_id": "pilot_n50_s0",
+ "condition": "pilot",
+ "n": 50,
+ "seed": 0,
+ "tau_true": null,
+ "prompt_schedule": [
+  {
+   "from": 3,
+   "to": 50,
+   "value": "baseline"
+  }
+ ],
+ "temperature_schedule": [
+  {
+   "from": 3,
+   "to": 50,
+   "value": 0.5
+  }
+ ],
+ "model_schedule": [
+  {
+   "from": 3,
+   "to": 50,
+   "value": "llama3.2-8k:latest"
+  }
+ ],
+ "chooser": "llm"
+}

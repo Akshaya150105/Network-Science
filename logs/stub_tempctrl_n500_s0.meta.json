@@ -1,0 +1,29 @@
+{
+ "run_id": "stub_tempctrl_n500_s0",
+ "condition": "tempctrl",
+ "n": 500,
+ "seed": 0,
+ "tau_true": null,
+ "prompt_schedule": [
+  {
+   "from": 3,
+   "to": 500,
+   "value": "baseline"
+  }
+ ],
+ "temperature_schedule": [
+  {
+   "from": 3,
+   "to": 500,
+   "value": 1.0
+  }
+ ],
+ "model_schedule": [
+  {
+   "from": 3,
+   "to": 500,
+   "value": "stub"
+  }
+ ],
+ "chooser": "stub_pa"
+}

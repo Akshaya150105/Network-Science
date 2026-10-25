@@ -40,7 +40,7 @@ if __name__ == "__main__":
     cv = json.loads((ROOT / "results" / "critical_values.json").read_text())
     asym = cv["asymptotic"]["0.05"]
     rows = []
-    with Pool() as pool:
+    with Pool(processes=1) as pool:
         for n, sims in SIMS.items():
             entry = cv[f"n{n}"]
             assert entry["source"] == "mc", f"n{n} critical value is not Monte Carlo"
